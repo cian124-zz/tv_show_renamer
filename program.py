@@ -1,4 +1,3 @@
-import requests
 import collections
 import file_io
 import rest_calls
@@ -44,7 +43,10 @@ def search_series(bearer_token, series_name):
 def get_series(bearer_token, series_id):
     resp_json = rest_calls.get_series_id(bearer_token, series_id)
     if resp_json:
-        print(resp_json)
+        new_series = Series(resp_json['data']['seriesName'], resp_json['data']['seriesName'].split(" (")[0],
+                            resp_json['data']['id'], resp_json['data']['network'],
+                            resp_json['data']['firstAired'].split("-")[0])
+        add_to_known_shows(new_series)
 
 
 def get_episode(bearer_token, series_id, season_num, episode_num):
@@ -62,6 +64,14 @@ def get_id_from_name(series_name):
             return 0
 
 
+def load_favourites(bearer_token):
+    resp_json = rest_calls.get_user_favorites(bearer_token)
+
+    for series_id in resp_json["data"]["favorites"]:
+        if not [item for item in known_series if series_id in item]:
+            get_series(bearer_token, series_id)
+
+
 def add_to_known_shows(new_series):
     known_series.append(new_series)
 
@@ -76,12 +86,13 @@ def main():
         known_series.append(element)
 
     bearer_token = get_token()
-    series_name = input('Series Name: ')
-    search_series(bearer_token, series_name)
+    load_favourites(bearer_token)
+    # series_name = input('Series Name: ')
+    # search_series(bearer_token, series_name)
     # for series in known_series:
     #     print(series.display_name)
     # get_series(bearer_token, known_series[0].id)
-    get_episode(bearer_token, known_series[0].id, 5, 7)
+    # get_episode(bearer_token, known_series[0].id, 5, 7)
     file_io.save(known_series)
 
 
