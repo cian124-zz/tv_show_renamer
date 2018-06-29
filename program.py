@@ -1,8 +1,9 @@
 import requests
 import collections
+import file_io
 
 
-Series = collections.namedtuple('Series', 'actual_name display_name id overview network year')
+Series = collections.namedtuple('Series', 'actual_name display_name id network year')
 known_series = []
 
 
@@ -14,8 +15,7 @@ def get_token():
     return resp.json()["token"]
 
 
-def search_series(bearer_token):
-    series_name = input('Series Name: ')
+def search_series(bearer_token, series_name):
     headers = {"Authorization": "Bearer {}".format(bearer_token)}
     payload = {"name": series_name}
     resp = requests.get('https://api.thetvdb.com/search/series', headers=headers, params=payload)
@@ -25,19 +25,20 @@ def search_series(bearer_token):
         choice = 1
         for data in resp.json()['data']:
             result = Series(data['seriesName'], data['seriesName'].split(" (")[0],
-                            data['id'], data['overview'], data['network'], data['firstAired'].split("-")[0])
+                            data['id'], data['network'], data['firstAired'].split("-")[0])
             results.append(result)
         if len(results) > 1:
             for i, entry in enumerate(results):
-                print('{}: {}, which started airing on {} in {}'.format(i+1, entry.display_name, entry.network, entry.year))
+                print('{}: {}, which started airing on {} in {}'.format(i+1, entry.display_name,
+                                                                        entry.network, entry.year))
 
             choice = input('Which of these series did you mean? (Choose number) ')
             choice = int(choice)
 
         confirmation = input('Is {}, which started airing on {} in {}, '
                              'the correct show? (y/n) '.format(results[choice - 1].display_name,
-                                                              results[choice - 1].network,
-                                                              results[choice - 1].year)).lower()
+                                                               results[choice - 1].network,
+                                                               results[choice - 1].year)).lower()
         if confirmation == 'y':
             add_to_known_shows(results[choice-1])
     else:
@@ -47,6 +48,15 @@ def search_series(bearer_token):
 def get_series(bearer_token, series_id):
     headers = {"Authorization": "Bearer {}".format(bearer_token)}
     resp = requests.get('https://api.thetvdb.com/series/{}'.format(series_id), headers=headers)
+
+    print(resp.json())
+
+
+def get_episode(bearer_token, series_id, season_num, episode_num):
+    headers = {"Authorization": "Bearer {}".format(bearer_token)}
+    payload = {"id": series_id, "airedSeason": season_num, "airedEpisode": episode_num}
+    resp = requests.get('https://api.thetvdb.com/series/{}/episodes/query'.format(series_id),
+                        headers=headers, params=payload)
 
     print(resp.json())
 
@@ -63,10 +73,23 @@ def add_to_known_shows(new_series):
     known_series.append(new_series)
 
 
+def parse_title():
+    pass
+
+
 def main():
+    temp = file_io.load()
+    for element in temp:
+        known_series.append(element)
+
     bearer_token = get_token()
-    search_series(bearer_token)
-    get_series(bearer_token, known_series[0].id)
+    # series_name = input('Series Name: ')
+    # search_series(bearer_token, series_name)
+    # for series in known_series:
+    #     print(series.display_name)
+    # get_series(bearer_token, known_series[0].id)
+    get_episode(bearer_token, known_series[0].id, 5, 7)
+    file_io.save(known_series)
 
 
 if __name__ == '__main__':
