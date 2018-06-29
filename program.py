@@ -1,6 +1,7 @@
 import requests
 import collections
 import file_io
+import rest_calls
 
 
 Series = collections.namedtuple('Series', 'actual_name display_name id network year')
@@ -8,22 +9,17 @@ known_series = []
 
 
 def get_token():
-    task = {"apikey": "GMF7D81TXRBLW3EX", "userkey": "6MD4CVDHE6HKZC6H", "username": "cian12493r1f"}
-    resp = requests.post('https://api.thetvdb.com/login', json=task)
-
-    print('Created task. Token: {}'.format(resp.json()["token"]))
-    return resp.json()["token"]
+    resp_json = rest_calls.post_login()
+    if resp_json:
+        return resp_json["token"]
 
 
 def search_series(bearer_token, series_name):
-    headers = {"Authorization": "Bearer {}".format(bearer_token)}
-    payload = {"name": series_name}
-    resp = requests.get('https://api.thetvdb.com/search/series', headers=headers, params=payload)
-
-    if resp.status_code == 200 or resp.status_code == 201:
+    resp_json = rest_calls.get_search_series(bearer_token, series_name)
+    if resp_json:
         results = []
         choice = 1
-        for data in resp.json()['data']:
+        for data in resp_json['data']:
             result = Series(data['seriesName'], data['seriesName'].split(" (")[0],
                             data['id'], data['network'], data['firstAired'].split("-")[0])
             results.append(result)
@@ -46,19 +42,16 @@ def search_series(bearer_token, series_name):
 
 
 def get_series(bearer_token, series_id):
-    headers = {"Authorization": "Bearer {}".format(bearer_token)}
-    resp = requests.get('https://api.thetvdb.com/series/{}'.format(series_id), headers=headers)
-
-    print(resp.json())
+    resp_json = rest_calls.get_series_id(bearer_token, series_id)
+    if resp_json:
+        print(resp_json)
 
 
 def get_episode(bearer_token, series_id, season_num, episode_num):
-    headers = {"Authorization": "Bearer {}".format(bearer_token)}
-    payload = {"id": series_id, "airedSeason": season_num, "airedEpisode": episode_num}
-    resp = requests.get('https://api.thetvdb.com/series/{}/episodes/query'.format(series_id),
-                        headers=headers, params=payload)
+    resp_json = rest_calls.get_series_id_episodes_query(bearer_token, series_id, season_num, episode_num)
 
-    print(resp.json())
+    if resp_json:
+        print(resp_json)
 
 
 def get_id_from_name(series_name):
@@ -83,8 +76,8 @@ def main():
         known_series.append(element)
 
     bearer_token = get_token()
-    # series_name = input('Series Name: ')
-    # search_series(bearer_token, series_name)
+    series_name = input('Series Name: ')
+    search_series(bearer_token, series_name)
     # for series in known_series:
     #     print(series.display_name)
     # get_series(bearer_token, known_series[0].id)

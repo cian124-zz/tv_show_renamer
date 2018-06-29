@@ -21,8 +21,8 @@ def save(known_series):
     print("Saving to {}".format(filepath))
     with open(filepath, 'w') as fout:
         for entry in known_series:
-            fout.write('{},{},{},{},{}'.format(entry.actual_name, entry.display_name, entry.id,
-                                                 entry.network, entry.year))
+            fout.write('{},{},{},{},{}\n'.format(entry.actual_name, entry.display_name, entry.id,
+                                                 entry.network, entry.year.strip()))
     return
 
 
