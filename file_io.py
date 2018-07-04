@@ -26,9 +26,30 @@ def save(known_series):
     return
 
 
+def get_episodes_in_directory(base_dir):
+    files = []
+    for root, directories, filenames in os.walk(base_dir):
+        for filename in filenames:
+            if filename.endswith(".mp4"):
+                print(os.path.join(root, filename))
+                files.append([root, filename])
+    return files
+
+
+def rename_file(old_path, new_path, old_name, new_name):
+    old_path = os.path.abspath(os.path.join(old_path, old_name))
+    new_path = os.path.abspath(os.path.join(new_path, new_name))
+    os.rename(old_path, new_path)
+
+
 def get_filepath():
     filepath = os.path.abspath(os.path.join('.', 'data', 'series' + '.txt'))
     return filepath
+
+
+def create_directory(directory):
+    if not os.path.exists(directory):
+        os.makedirs(directory)
 
 
 def add_entry(entry, jnal):
