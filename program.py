@@ -1,6 +1,5 @@
 import collections
 import re
-
 import file_io
 import rest_calls
 
@@ -51,11 +50,12 @@ def get_series(bearer_token, series_id):
         add_to_known_shows(new_series)
 
 
-def get_episode(bearer_token, series_id, season_num, episode_num):
+def get_episode_name(bearer_token, series_id, season_num, episode_num):
     resp_json = rest_calls.get_series_id_episodes_query(bearer_token, series_id, season_num, episode_num)
 
     if resp_json:
-        print(resp_json)
+        episode_name = resp_json['data'][0]['episodeName']
+        return episode_name
 
 
 def get_id_from_name(series_name):
@@ -68,7 +68,6 @@ def get_id_from_name(series_name):
 
 def load_favourites(bearer_token):
     resp_json = rest_calls.get_user_favorites(bearer_token)
-
     for series_id in resp_json["data"]["favorites"]:
         if not [item for item in known_series if series_id in item]:
             get_series(bearer_token, series_id)
@@ -83,7 +82,8 @@ def parse_title(orig_title):
     season_num = 0
     episode_num = 0
     orig_title = orig_title.lower()
-    split_title = orig_title.split(".")
+    split_title = re.split('[. ]', orig_title)
+    print(split_title)
     for word in split_title:
         word_list = list(word)
         if episode_num != 0:
@@ -91,6 +91,8 @@ def parse_title(orig_title):
         elif word_list[0] == 's':
             if check_if_number(word_list[1]):
                 season_num = int(word_list[1] + word_list[2])
+                if len(word_list) < 3:
+                    episode_num = int(word_list[4] + word_list[5])
             else:
                 series_name = series_name + ' ' + word
         elif season_num != 0:
@@ -111,14 +113,27 @@ def check_if_number(s):
 
 
 def check_if_series_exists(series_name):
-    regex = re.compile('[.]')
+    regex = re.compile("[.']")
     for series in known_series:
         actual_name = regex.sub('', series.actual_name)
         display_name = regex.sub('', series.display_name)
         if series_name == actual_name.lower():
-            return series.id
+            return series.id, series.display_name
         elif series_name == display_name.lower():
-            return series.id
+            return series.id, series.display_name
+
+
+def rename_episode(bearer_token):
+    series_name, season_num, episode_num = parse_title("game of thrones S02.E01")
+    print('Series Name: {}\nSeries Number: {}\nEpisode Number: {}'.format(series_name, season_num, episode_num))
+    series_id, series_name = check_if_series_exists(series_name)
+    print(series_id)
+
+    episode_name = get_episode_name(bearer_token, series_id, season_num, episode_num)
+
+    filename = "{} S{}E{} {}".format(series_name, str(season_num).zfill(2), str(episode_num).zfill(2), episode_name)
+
+    print(filename)
 
 
 def main():
@@ -134,12 +149,7 @@ def main():
     #     print(series.display_name)
     # get_series(bearer_token, known_series[0].id)
     # get_episode(bearer_token, known_series[0].id, 5, 7)
-    series_name, season_num, episode_num = parse_title("Mr.Robot.S02.e09.sbfiuIBfwb.pw84")
-    print('Series Name: {}\nSeries Number: {}\nEpisode Number: {}'.format(series_name, season_num, episode_num))
-    series_id = check_if_series_exists(series_name)
-    print(series_id)
-
-    get_episode(bearer_token, series_id, series_num, episode_num)
+    rename_episode(bearer_token)
     file_io.save(known_series)
 
 

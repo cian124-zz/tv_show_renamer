@@ -5,3 +5,29 @@ Mr. Robot,Mr. Robot,289590,USA Network,2015
 A Series of Unfortunate Events,A Series of Unfortunate Events,306304,Netflix,2017
 Adventure Time,Adventure Time,152831,Cartoon Network,2010
 Archer (2009),Archer,110381,FXX,2009
+GLOW,GLOW,324835,Netflix,2017
+American Gods,American Gods,253573,Starz!,2017
+American Vandal,American Vandal,332828,Netflix,2017
+Atlanta,Atlanta,313999,FX (US),2016
+Black Mirror,Black Mirror,253463,Netflix,2011
+Bob's Burgers,Bob's Burgers,194031,FOX (US),2011
+BoJack Horseman,BoJack Horseman,282254,Netflix,2014
+Catastrophe (2015),Catastrophe,289771,Channel 4,2015
+DARK,DARK,334824,Netflix,2017
+Fargo,Fargo,269613,FX (US),2014
+Insecure,Insecure,314986,HBO,2016
+It's Always Sunny in Philadelphia,It's Always Sunny in Philadelphia,75805,FXX,2005
+Master of None,Master of None,298901,Netflix,2015
+MINDHUNTER,MINDHUNTER,328708,Netflix,2017
+Mozart in the Jungle,Mozart in the Jungle,278335,Amazon,2014
+Neo Yokio,Neo Yokio,334670,Netflix,2017
+Rick and Morty,Rick and Morty,275274,Adult Swim,2013
+RuPaul's Drag Race All Stars,RuPaul's Drag Race All Stars,263380,VH1,2012
+Silicon Valley,Silicon Valley,277165,HBO,2014
+Stranger Things,Stranger Things,305288,Netflix,2016
+The End of the Fucking World,The End of the Fucking World,348808,Channel 4,
+The Deuce,The Deuce,317728,HBO,2017
+The OA,The OA,321060,Netflix,2016
+True Detective,True Detective,270633,HBO,2014
+Veep,Veep,237831,HBO,2012
+Arrested Development,Arrested Development,72173,Netflix,2003
