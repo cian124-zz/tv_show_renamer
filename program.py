@@ -1,4 +1,6 @@
 import collections
+import re
+
 import file_io
 import rest_calls
 
@@ -76,8 +78,47 @@ def add_to_known_shows(new_series):
     known_series.append(new_series)
 
 
-def parse_title():
-    pass
+def parse_title(orig_title):
+    series_name = ''
+    season_num = 0
+    episode_num = 0
+    orig_title = orig_title.lower()
+    split_title = orig_title.split(".")
+    for word in split_title:
+        word_list = list(word)
+        if episode_num != 0:
+            break
+        elif word_list[0] == 's':
+            if check_if_number(word_list[1]):
+                season_num = int(word_list[1] + word_list[2])
+            else:
+                series_name = series_name + ' ' + word
+        elif season_num != 0:
+            if check_if_number(word_list[1]):
+                episode_num = int(word_list[1] + word_list[2])
+        else:
+            series_name = series_name + ' ' + word
+
+    return series_name.strip(), season_num, episode_num
+
+
+def check_if_number(s):
+    try:
+        float(s)
+        return True
+    except ValueError:
+        return False
+
+
+def check_if_series_exists(series_name):
+    regex = re.compile('[.]')
+    for series in known_series:
+        actual_name = regex.sub('', series.actual_name)
+        display_name = regex.sub('', series.display_name)
+        if series_name == actual_name.lower():
+            return series.id
+        elif series_name == display_name.lower():
+            return series.id
 
 
 def main():
@@ -93,6 +134,12 @@ def main():
     #     print(series.display_name)
     # get_series(bearer_token, known_series[0].id)
     # get_episode(bearer_token, known_series[0].id, 5, 7)
+    series_name, season_num, episode_num = parse_title("Mr.Robot.S02.e09.sbfiuIBfwb.pw84")
+    print('Series Name: {}\nSeries Number: {}\nEpisode Number: {}'.format(series_name, season_num, episode_num))
+    series_id = check_if_series_exists(series_name)
+    print(series_id)
+
+    get_episode(bearer_token, series_id, series_num, episode_num)
     file_io.save(known_series)
 
 

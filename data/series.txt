@@ -2,3 +2,6 @@ Game of Thrones,Game of Thrones,121361,HBO,2011
 Queer Eye,Queer Eye,341614,Netflix,2018
 RuPaul's Drag Race,RuPaul's Drag Race,85002,VH1,2009
 Mr. Robot,Mr. Robot,289590,USA Network,2015
+A Series of Unfortunate Events,A Series of Unfortunate Events,306304,Netflix,2017
+Adventure Time,Adventure Time,152831,Cartoon Network,2010
+Archer (2009),Archer,110381,FXX,2009
