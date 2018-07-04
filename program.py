@@ -85,7 +85,7 @@ def parse_title(orig_title):
     for word in split_title:
         print(word)
         word_list = list(word)
-        if word != '':
+        if word != '' and not check_if_number(word):
             if episode_num != 0:
                 break
             elif word_list[0] == 's':
@@ -124,7 +124,7 @@ def check_if_series_exists(series_name):
 
 
 def rename_episode(bearer_token):
-    files = file_io.get_episodes_in_directory('/Users/cmccormack/Desktop/test')
+    files = file_io.get_episodes_in_directory("C:\\Users\\Cian\\Downloads\\TV")
     for episode_info in files:
         series_name, season_num, episode_num = parse_title(episode_info[1])
         if season_num != 0:
@@ -132,13 +132,14 @@ def rename_episode(bearer_token):
             series_id, series_name = check_if_series_exists(series_name)
 
             episode_name = get_episode_name(bearer_token, series_id, season_num, episode_num)
+            episode_name = re.sub('[!@#$:]', '', episode_name)
 
             filename = "{} S{}E{} {}".format(series_name, str(season_num).zfill(2), str(episode_num).zfill(2), episode_name)
-            filename = '{}.mp4'.format(filename)
-            print(filename)
-            new_directory = '/Users/cmccormack/Desktop/test/{}/Season {}'.format(series_name, season_num)
+            filename = '{}.mkv'.format(filename)
+            new_directory = "C:\\Users\\Cian\\Videos\\TV Series\\{}\\Season {}".format(series_name, season_num)
             file_io.create_directory(new_directory)
             file_io.rename_file(episode_info[0], new_directory, episode_info[1], filename)
+            print("Copied {}".format(filename))
 
 
 def main():
