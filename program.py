@@ -124,7 +124,9 @@ def check_if_series_exists(series_name):
 
 
 def rename_episode(bearer_token):
-    files = file_io.get_episodes_in_directory("C:\\Users\\Cian\\Downloads\\TV")
+    source_dir = input("Source Directory: ")
+    target_dir = input("Target Directory: ")
+    files = file_io.get_episodes_in_directory(source_dir)
     for episode_info in files:
         series_name, season_num, episode_num = parse_title(episode_info[1])
         if season_num != 0:
@@ -136,7 +138,7 @@ def rename_episode(bearer_token):
 
             filename = "{} S{}E{} {}".format(series_name, str(season_num).zfill(2), str(episode_num).zfill(2), episode_name)
             filename = '{}.mkv'.format(filename)
-            new_directory = "C:\\Users\\Cian\\Videos\\TV Series\\{}\\Season {}".format(series_name, season_num)
+            new_directory = "{}\\{}\\Season {}".format(target_dir, series_name, season_num)
             file_io.create_directory(new_directory)
             file_io.rename_file(episode_info[0], new_directory, episode_info[1], filename)
             print("Copied {}".format(filename))
