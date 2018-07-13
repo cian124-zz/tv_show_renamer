@@ -157,7 +157,8 @@ def main():
     #     print(series.display_name)
     # get_series(bearer_token, known_series[0].id)
     # get_episode(bearer_token, known_series[0].id, 5, 7)
-    rename_episode(bearer_token)
+    # rename_episode(bearer_token)
+    rest_calls.search_film_by_title("2a7a81b0", "Baby", "2017")
     file_io.save(known_series)
 
 

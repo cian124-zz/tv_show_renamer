@@ -72,3 +72,25 @@ def get_user_favorites(bearer_token):
 
     if resp.status_code == 200 or resp.status_code == 201:
         return resp.json()
+
+
+# OMDB API - More info at http://www.omdbapi.com/
+
+def get_film_by_title(api_key, film_title, film_year):
+    # Returns information for a film based on the title and year
+    payload = {"apikey": api_key, "t": film_title, "y": film_year}
+    resp = requests.get('http://www.omdbapi.com/', params=payload)
+
+    if resp.status_code == 200 or resp.status_code == 201:
+        print(resp.json())
+        return resp.json()
+
+
+def search_film_by_title(api_key, film_title, film_year):
+    # Searches for a film based on the title and year
+    payload = {"apikey": api_key, "s": film_title, "y": film_year}
+    resp = requests.get('http://www.omdbapi.com/', params=payload)
+
+    if resp.status_code == 200 or resp.status_code == 201:
+        print(resp.json())
+        return resp.json()
