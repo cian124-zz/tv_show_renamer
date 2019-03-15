@@ -37,6 +37,16 @@ def get_episodes_in_directory(base_dir):
     return files
 
 
+def get_films_in_directory(base_dir):
+    files = []
+    for root, directories, filenames in os.walk(base_dir):
+        for filename in filenames:
+            if filename.endswith(".mkv"):
+                print(os.path.join(root, filename))
+                files.append([root, filename])
+    return files
+
+
 def rename_file(old_path, new_path, old_name, new_name):
     old_path = os.path.abspath(os.path.join(old_path, old_name))
     new_path = os.path.abspath(os.path.join(new_path, new_name))
