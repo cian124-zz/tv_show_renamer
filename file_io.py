@@ -30,7 +30,8 @@ def get_episodes_in_directory(base_dir):
     files = []
     for root, directories, filenames in os.walk(base_dir):
         for filename in filenames:
-            if filename.endswith(".mkv"):
+            if filename.endswith(".mkv") or filename.endswith(".mp4") \
+                    or filename.endswith(".avi") or filename.endswith(".m4v"):
                 print(os.path.join(root, filename))
                 files.append([root, filename])
     return files

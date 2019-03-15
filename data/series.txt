@@ -31,3 +31,8 @@ The OA,The OA,321060,Netflix,2016
 True Detective,True Detective,270633,HBO,2014
 Veep,Veep,237831,HBO,2012
 Arrested Development,Arrested Development,72173,Netflix,2003
+Sharp Objects,Sharp Objects,346602,HBO,2018
+Hannibal,Hannibal,259063,NBC,2013
+The Handmaid's Tale,The Handmaid's Tale,321239,Hulu,2017
+Togetherness,Togetherness,277863,HBO,2015
+The End of the F***ing World,The End of the F***ing World,336522,Channel 4,2017
